@@ -1,0 +1,25 @@
+# ==================== 主依赖（训练 + 推理 + Web 服务）====================
+# 安装：pip install -r requirements.txt
+#
+# 版本策略：使用 ">=" 兼容下限，避免锁死版本导致新环境装不上。
+# 本项目实测通过的版本见 README.md 「实测环境」一节。
+
+# ---- 深度学习框架（CPU 版即可，本项目为本地推理，无需 GPU）----
+torch>=2.2
+torchvision>=0.17
+
+# ---- 数值计算与图像处理 ----
+numpy>=1.26
+pillow>=10.0
+# scipy 只用到 ndimage.label / find_objects（连通域标记），
+# 用于 app/preprocess.py 的 find_digit_boxes()，也是 scikit-learn 的依赖，原本就装着
+scipy>=1.11
+
+# ---- 后端 Web 框架 ----
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+
+# ---- 训练报告与图表（训练曲线、混淆矩阵、分类报告）----
+matplotlib>=3.8
+scikit-learn>=1.4

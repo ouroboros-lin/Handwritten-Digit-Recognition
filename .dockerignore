@@ -1,0 +1,50 @@
+# ==========================================================================
+# docker build 的排除清单（作用于构建上下文，与 .gitignore 无关）
+#
+# 原则：运行时不读的东西一律不打进镜像。
+# 注意 models/mnist_cnn.pt **不能**排除——接口完全依赖它，
+# 而且只有 1.69MB，打进镜像比挂载卷简单得多。
+# ==========================================================================
+
+# ---- 虚拟环境：容器内会重新 pip install，本地环境毫无用处 ----
+.venv/
+venv/
+env/
+
+# ---- 数据集 ----
+# MNIST 约 64MB。不打进镜像 => 云端 /sample 接口会返回 503（README 已说明），
+# 用户手写数字仍然完全可用。本地跑 docker 时若需要随机样例，
+# 可以改成挂载：docker run -v ./data:/app/data -p 8000:8000 mnist-web
+data/
+
+# ---- 训练产出：曲线、混淆矩阵、分类报告，纯展示材料，运行时不读 ----
+reports/
+
+# ---- Python 缓存与测试缓存 ----
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ---- IDE 与编辑器 ----
+.idea/
+.qodo/
+.vscode/
+
+# ---- AI 辅助工具的会话目录：纯本地文件，绝不能进镜像 ----
+.claude/
+
+# ---- 版本控制 ----
+.git/
+.gitignore
+
+# ---- 开发用文件：镜像里用不到，排除后上下文更小、构建更快 ----
+tests/
+tools/
+conftest.py
+requirements-dev.txt
+TASK*.md
+Dockerfile
+.dockerignore

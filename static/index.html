@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>手写数字识别 · MNIST CNN</title>
+  <meta name="description" content="在浏览器上手写 0-9 的单个数字，由本地训练的 PyTorch CNN 实时识别。">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="page">
+
+    <!-- ==================== 页头 ==================== -->
+    <header class="page__header">
+      <h1 class="page__title">手写数字识别</h1>
+      <p class="page__subtitle">
+        在下方画布写下 0–9 的任意一个数字，点击「识别」查看模型预测结果
+      </p>
+    </header>
+
+    <!-- ==================== 工作区：画布 + 结果 ==================== -->
+    <div class="workspace">
+
+      <!-- ---------- 左：画布 ---------- -->
+      <section class="panel panel--canvas" aria-label="手写画布">
+        <div class="canvas-wrap">
+          <canvas id="digit-canvas" class="canvas" aria-label="手写数字画布"></canvas>
+          <!-- 提示浮层：第一次落笔后隐藏 -->
+          <p class="canvas-hint" id="canvas-hint">在此处书写</p>
+        </div>
+
+        <div class="actions">
+          <button id="btn-predict" class="btn btn--primary" type="button">
+            <span class="btn__spinner" aria-hidden="true"></span>
+            <span class="btn__text">识别</span>
+          </button>
+          <button id="btn-clear" class="btn btn--ghost" type="button">清空</button>
+          <button id="btn-sample" class="btn btn--ghost" type="button">随机样例</button>
+
+          <!-- 实时识别开关：默认关闭。用原生 checkbox 承载状态（可键盘操作、
+               有正确的无障碍语义），外观由 CSS 画成椭圆滑块。
+               刻意不写 for 属性：input 就在 label 内部，靠隐式关联即可；
+               同时写 for 指向内部元素在部分浏览器会触发两次切换 -->
+          <label class="toggle">
+            <input type="checkbox" id="realtime-toggle" class="toggle__input">
+            <span class="toggle__track" aria-hidden="true">
+              <span class="toggle__thumb"></span>
+            </span>
+            <span class="toggle__label">实时识别</span>
+            <span class="toggle__hint">开启后自动识别</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- ---------- 右：结果 ---------- -->
+      <section class="panel panel--result" aria-label="识别结果">
+        <div class="result-head">
+          <div class="result-digit" id="result-digit">—</div>
+          <div class="result-meta">
+            <span class="result-meta__label">预测结果</span>
+            <span class="result-confidence" id="result-confidence">—</span>
+            <span class="result-meta__hint" id="result-hint">置信度</span>
+          </div>
+        </div>
+
+        <!-- 状态行：加载中 / 错误 / 完成耗时 -->
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+
+        <!-- 10 个数字的概率柱状图（行由 app.js 生成） -->
+        <div class="bars" id="bars" aria-label="各数字概率分布"></div>
+      </section>
+
+    </div>
+
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="page__footer">
+      <span>本地推理 · 不调用任何外部 API</span>
+      <span class="dot">·</span>
+      <span>PyTorch CNN（MNIST，测试集准确率 99.02%）</span>
+      <span class="dot">·</span>
+      <a href="/docs" target="_blank" rel="noopener">接口文档</a>
+    </footer>
+
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

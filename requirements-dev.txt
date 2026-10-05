@@ -1,0 +1,12 @@
+# ==================== 开发 / 测试依赖（可选安装）====================
+# 安装：pip install -r requirements-dev.txt
+# 说明：主依赖 requirements.txt 中不含任何测试库，生产环境可只装主依赖。
+
+# 继承主依赖
+-r requirements.txt
+
+# ---- 单元测试框架 ----
+pytest>=8.0
+
+# ---- FastAPI TestClient 底层依赖的 HTTP 客户端 ----
+httpx>=0.27
